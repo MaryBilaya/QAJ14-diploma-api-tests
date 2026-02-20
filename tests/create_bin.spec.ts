@@ -1,4 +1,4 @@
-import { test, expect } from './fixtures';
+import { test, expect } from '../fixtures';
 
 test.describe('Create Bins API', () => {
     //1. Успешное создание bin с простым JSON (по умолчанию создастся private bin -> X-Bin-Private = true) 
