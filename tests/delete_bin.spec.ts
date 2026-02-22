@@ -2,7 +2,7 @@ import { test, expect } from '../fixtures';
 
 
 test.describe('Delete Bins API', () => {
-    let binId: string;;
+    let binId: string;
 
     test.beforeEach(async ({ jsonBin }) => {
         const createdBin = await jsonBin.createBin({ value: 'for delete tests'}); 
@@ -19,8 +19,14 @@ test.describe('Delete Bins API', () => {
         const { response, response_body } = await jsonBin.deleteBin(binId);
 
         expect(response.status()).toBe(200);
-        expect(response_body.metadata.id).toEqual(binId);
+        expect(response_body.metadata.id).toBe(binId);
         expect(response_body.message).toBe('Bin deleted successfully');
+
+        //проверяю, что bin действительно удален из базы
+        const { response: readResponse, response_body: readBody } = await jsonBin.readBin(binId);
+
+        expect(readResponse.status()).toBe(404);
+        expect(readBody.message).toBe("Bin not found or it doesn't belong to your account");
     });
 
     //2. Попытка повторного удаления того же bin
@@ -28,7 +34,7 @@ test.describe('Delete Bins API', () => {
         await jsonBin.deleteBin(binId);
         const { response, response_body } = await jsonBin.deleteBin(binId);
 
-        expect([400, 404]).toContain(response.status());
+        expect([404]).toContain(response.status());
         expect(response_body.message).toBe("Bin not found or it doesn't belong to your account");
     });
 
@@ -41,7 +47,7 @@ test.describe('Delete Bins API', () => {
     });
 
     //4. Удаление bin без X-Master-Key
-    test('Delete bin withot master key @negative', async ({ request }) => {
+    test('Delete bin without master key @negative', async ({ request }) => {
         const response = await request.delete(`https://api.jsonbin.io/v3/b/${binId}`, {});
         const response_body = await response.json();
 

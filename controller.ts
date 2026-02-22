@@ -45,7 +45,7 @@ export class ControllerBin {
                 let bin_id: string | undefined;
                 if (response.ok() && response_body?.metadata?.id) {
                     bin_id = response_body.metadata.id as string;
-                }
+                } 
 
                 return { response, response_body, bin_id }
             }

@@ -13,6 +13,12 @@ test.describe('Update Bins API', () => {
         expect(response.status()).toBe(200);
         expect(response_body.record).toEqual(updateData);
         expect(response_body.metadata.parentId).toBe(binId);
+
+        //проверяю, что данные действительно изменились в базе
+        const { response: readResponse, response_body: readBody } = await jsonBin.readBin(binId);
+
+        expect(readResponse.status()).toBe(200);
+        expect(readBody.record).toEqual(updateData);
     });
 
     //2. Обновление с версионированием (X-Bin-Version = true)
