@@ -15,7 +15,7 @@ test.describe('Update Bins API', () => {
     });
 
     //2. Обновление с версионированием (X-Bin-Version = true)
-    test('Update with X-Bin-Version = true @negative', async ({ jsonBin }) => {
+    test('Update with X-Bin-Version = true @positive @extended', async ({ jsonBin }) => {
         const { response_body: create_body } = await jsonBin.createBin({ sample: "version 1"});
         const binId = create_body.metadata.id;
 

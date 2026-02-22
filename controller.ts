@@ -2,9 +2,13 @@ import { APIRequestContext, APIResponse, expect } from "playwright/test";
 
 export class ControllerBin {
     private request: APIRequestContext;
+    private readonly masterKey: string;
 
     constructor(request: APIRequestContext) {
         this.request = request;
+        
+        const masterKey = process.env.X_Master_Key;
+        this.masterKey = masterKey as string;
     }
 
     //создание bin 
@@ -14,7 +18,7 @@ export class ControllerBin {
         }): Promise<{ response: APIResponse; response_body: any}> {
                 const headers: Record<string, string> = {
                     'Content-Type': 'application/json',                                 //required. Without: "Error Message"
-                    'X-Master-Key': process.env.X_Master_Key as string,                 //required   
+                    'X-Master-Key': this.masterKey,                                     //required   
                 };
                 if (options?.x_bin_private !== undefined) {
                     headers['X-Bin-Private'] = String(options.x_bin_private);
@@ -38,7 +42,7 @@ export class ControllerBin {
     async readBin(binId: string, options?: {binVersion?: string; meta?: boolean})
     : Promise<{ response: APIResponse; response_body: any}> { 
         const headers: Record<string, string> = {
-            'X-Master-Key': process.env.X_Master_Key as string,
+            'X-Master-Key': this.masterKey,
         };
 
         let url = `/v3/b/${binId}`;
@@ -72,7 +76,7 @@ export class ControllerBin {
     : Promise<{ response: APIResponse; response_body: any}> {
         const headers: Record<string, string> = {
             'Content-Type': 'application/json',                                 
-            'X-Master-Key': process.env.X_Master_Key as string,
+            'X-Master-Key': this.masterKey,
         };
 
         if (options?.binVersioning !== undefined) {
@@ -95,7 +99,7 @@ export class ControllerBin {
     async deleteBin(binId: string) {
         const response = await this.request.delete(`v3/b/${binId}`, {
             headers: {
-               'X-Master-Key': process.env.X_Master_Key as string, 
+               'X-Master-Key': this.masterKey, 
             }
         });
 
