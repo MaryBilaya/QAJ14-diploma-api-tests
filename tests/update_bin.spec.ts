@@ -1,5 +1,6 @@
 import { test, expect } from '../fixtures';
 
+
 test.describe('Update Bins API', () => {
     //1. Успешное обновление bin
     test('Successful bin updating @positive', async ({ jsonBin }) => {

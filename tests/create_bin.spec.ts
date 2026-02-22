@@ -1,5 +1,6 @@
 import { test, expect } from '../fixtures';
 
+
 test.describe('Create Bins API', () => {
     //1. Успешное создание bin с простым JSON (по умолчанию создастся private bin -> X-Bin-Private = true) 
     test('Create private bin (by default) @positive', async ({ jsonBin }) => {
@@ -41,6 +42,6 @@ test.describe('Create Bins API', () => {
         const { response, response_body } = await jsonBin.createBin(undefined);
 
         expect(response.status()).toBe(400);
-        expect(response_body).toHaveProperty('message', 'Bin cannot be blank');
+        expect(response_body.message).toBe("Bin cannot be blank");
     });
 })

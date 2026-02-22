@@ -1,23 +1,32 @@
 import { test, expect } from '../fixtures';
-import { createTestBin } from '../helpers/create_test_bin';
-import { APIRequestContext } from "playwright/test";
+
 
 test.describe('Delete Bins API', () => {
+    let binId: string;;
+
+    test.beforeEach(async ({ jsonBin }) => {
+        const createdBin = await jsonBin.createBin({ value: 'for delete tests'}); 
+
+        if (!createdBin.bin_id) {
+            throw new Error('createBin did not return bin_id');
+        }
+
+        binId = createdBin.bin_id;
+    });
+
     //1. Успешное удаление существующего bin
-    test('Delete existing bin @positive', async ({ request, jsonBin }) => {
-        const createdBin = await createTestBin(request, { value: 'deletion'});
-        const { response, response_body } = await jsonBin.deleteBin(createdBin.bin_id);
+    test('Delete existing bin @positive', async ({ jsonBin }) => {
+        const { response, response_body } = await jsonBin.deleteBin(binId);
 
         expect(response.status()).toBe(200);
-        expect(response_body.metadata.id).toEqual(createdBin.bin_id);
+        expect(response_body.metadata.id).toEqual(binId);
         expect(response_body.message).toBe('Bin deleted successfully');
     });
 
     //2. Попытка повторного удаления того же bin
-    test('Attempt to delete the same bin again @negative', async ({ request, jsonBin }) => {
-        const createdBin = await createTestBin(request, { value: 'delete twice'});
-        await jsonBin.deleteBin(createdBin.bin_id);
-        const { response, response_body } = await jsonBin.deleteBin(createdBin.bin_id);
+    test('Attempt to delete the same bin again @negative', async ({ jsonBin }) => {
+        await jsonBin.deleteBin(binId);
+        const { response, response_body } = await jsonBin.deleteBin(binId);
 
         expect([400, 404]).toContain(response.status());
         expect(response_body.message).toBe("Bin not found or it doesn't belong to your account");
@@ -33,8 +42,7 @@ test.describe('Delete Bins API', () => {
 
     //4. Удаление bin без X-Master-Key
     test('Delete bin withot master key @negative', async ({ request }) => {
-        const createdBin = await createTestBin(request, { value: 'delete without key'});
-        const response = await request.delete(`https://api.jsonbin.io/v3/b/${createdBin.bin_id}`, {});
+        const response = await request.delete(`https://api.jsonbin.io/v3/b/${binId}`, {});
         const response_body = await response.json();
 
         console.log('Delete STATUS', response.status());

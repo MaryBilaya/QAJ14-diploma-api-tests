@@ -1,12 +1,15 @@
 import { test, expect } from '../fixtures';
-import { createTestBin } from '../helpers/create_test_bin';
-import { updateTestBin } from '../helpers/update_test_bin';
-import { APIRequestContext } from "playwright/test";
+
 
 test.describe('Read Bins API', () => {
     //1. Чтение существующего bin с metadata
-    test('Read existing bin with metadata @positive', async ({ request, jsonBin }) => {
-        const createdBin = await createTestBin(request, {sample: "Creating bin for reading"});
+    test('Read existing bin with metadata @positive', async ({ jsonBin }) => {
+        const createdBin = await jsonBin.createBin({sample: "Creating bin for reading"});
+
+        if (!createdBin.bin_id) {
+            throw new Error('createBin did not return bin_id');
+        }
+
         const { response, response_body } = await jsonBin.readBin(createdBin.bin_id);
 
         expect(response.status()).toBe(200);
@@ -15,8 +18,13 @@ test.describe('Read Bins API', () => {
     });
 
     //2. Чтение существующего bin без metadata (meta=false)
-    test('Read existing bin without metadata @positive', async ({ request, jsonBin }) => {
-        const createdBin = await createTestBin(request, {data: "Creating bin for reading"});
+    test('Read existing bin without metadata @positive', async ({ jsonBin }) => {
+        const createdBin = await jsonBin.createBin({data: "Creating bin for reading"});
+
+        if (!createdBin.bin_id) {
+            throw new Error('createBin did not return bin_id');
+        }
+
         const { response, response_body } = await jsonBin.readBin(createdBin.bin_id, {meta: false});
 
         expect(response.status()).toBe(200);
@@ -33,8 +41,8 @@ test.describe('Read Bins API', () => {
     });
 
     //4. Чтение bin без X-Master-Key
-    test('Read bin missing master key @negative', async ({ request }) => {
-        const createdBin = await createTestBin(request, {data: "Creating bin"});
+    test('Read bin missing master key @negative', async ({ request, jsonBin }) => {
+        const createdBin = await jsonBin.createBin({data: "Creating bin"});
         const response = await request.get(`https://api.jsonbin.io/v3/b/${createdBin.bin_id}`, {});
         const response_body = await response.json();
 

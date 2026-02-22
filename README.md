@@ -24,9 +24,6 @@
 
 ## 📂 Структура проекта
 ```text
-├─ helpers/                   # вспомогательные функции 
-│  ├─ create_test_bin.ts      # создание тестовых bin
-│  └─ update_test_bin.ts      # обновление тестовых bin 
 ├─ tests/
 │  ├─ create_bin.spec.ts      # тесты создания bin
 │  ├─ delete_bin.spec.ts      # тесты удаления bin
