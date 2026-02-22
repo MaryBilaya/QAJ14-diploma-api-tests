@@ -23,7 +23,7 @@
 - dotenv
 
 ## 📂 Структура проекта
-
+```text
 ├─ helpers/                   # вспомогательные функции 
 │  ├─ create_test_bin.ts      # создание тестовых bin
 │  └─ update_test_bin.ts      # обновление тестовых bin 
@@ -36,10 +36,11 @@
 ├─ fixtures.ts                # общие фикстуры / подготовка данных
 ├─ playwright.config.ts
 └─ README.md
+``` 
 
 ## Клонирование репозитория
-git clone https://github.com/MaryBilaya/QAJ14-diploma-api-tests.git
-cd QAJ14-diploma-api-tests
+* git clone https://github.com/MaryBilaya/QAJ14-diploma-api-tests.git
+* cd QAJ14-diploma-api-tests
 
 ## Установка зависимостей
 npm install
