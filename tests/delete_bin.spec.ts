@@ -8,9 +8,6 @@ test.describe('Delete Bins API', () => {
         const createdBin = await createTestBin(request, { value: 'deletion'});
         const { response, response_body } = await jsonBin.deleteBin(createdBin.bin_id);
 
-        console.log('STATUS', response.status());
-        console.log('BODY', await response.text());
-
         expect(response.status()).toBe(200);
         expect(response_body.metadata.id).toEqual(createdBin.bin_id);
         expect(response_body.message).toBe('Bin deleted successfully');
@@ -22,9 +19,6 @@ test.describe('Delete Bins API', () => {
         await jsonBin.deleteBin(createdBin.bin_id);
         const { response, response_body } = await jsonBin.deleteBin(createdBin.bin_id);
 
-        console.log('STATUS', response.status());
-        console.log('BODY', await response.text());
-
         expect([400, 404]).toContain(response.status());
         expect(response_body.message).toBe("Bin not found or it doesn't belong to your account");
     });
@@ -32,9 +26,6 @@ test.describe('Delete Bins API', () => {
     //3. Удаление bin с невалидным bin_id
     test('Delete bin with invalid bin_id @negative', async ({ jsonBin })=> {
         const { response, response_body } = await jsonBin.deleteBin('invalid-bin-id');
-
-        console.log('STATUS', response.status());
-        console.log('BODY', await response.text());
 
         expect([400]).toContain(response.status());
         expect(response_body.message).toBe('Invalid Bin Id provided');
@@ -46,8 +37,8 @@ test.describe('Delete Bins API', () => {
         const response = await request.delete(`https://api.jsonbin.io/v3/b/${createdBin.bin_id}`, {});
         const response_body = await response.json();
 
-        console.log('STATUS', response.status());
-        console.log('BODY', await response.text());
+        console.log('Delete STATUS', response.status());
+        console.log('Delete BODY', await response.text());
 
         expect(response.status()).toBe(401);
         expect(response_body.message).toBe('You need to pass X-Master-Key or X-Access-Key in the header to delete a bin');
