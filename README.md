@@ -18,9 +18,9 @@
 ## 🧰 Стек технологий
 - Node.js
 - Typescript
-- Playwright Test (APIRequestContext)
+- Playwright Test (APIRequestContext для работы с HTTP-запросами)
 - JSONBin API v3 (хранилище JSON)
-- dotenv
+- dotenv (для переменных окружения)
 
 ## 📂 Структура проекта
 ```text
@@ -53,39 +53,39 @@ X_Master_Key = ваш_master_key
 npm test
 
 ## HTML-отчет
-HTML-отчет открывается автоматически после прогона, вне зависимости от passed или failed
+HTML-отчет открывается автоматически после прогона, даже если все тесты прошли.
 
 ## Что покрыто автотестами
-|  №  |   Название CRUD-операции     |                   Test name                 |                     Название теста                   |          tag         |  
-|-----|------------------------------|---------------------------------------------|------------------------------------------------------|----------------------|
-| 1   | Create Bins API              | Create private bin (by default)             | Успешное создание bin с простым JSON (по умолчанию   | @positive            |
-|     |                              |                                             | создастся private bin -> X-Bin-Private = true)       |                      |
-| 2   |                              | Create bin: public bin                      | Создание публичного bin (X-Bin-Private = false)      | @positive            |
-| 3   |                              | Create bin with name                        | Создание bin с именем X-Bin-Name                     | @positive, @extended |
-| 4   |                              | Negative case. Create bin: invalid body     | Отправка запроса с некорректно заполненным body      | @negative            |
-| 5   |                              | Negative case. Create bin: empty body       | Отправка запроса с пустым body                       | @negative            | 
+|  №  |   Название CRUD-операции     |                 Test name               |                     Название теста                   |          tag         |  
+|-----|------------------------------|-----------------------------------------|------------------------------------------------------|----------------------|
+| 1   | Create Bins API              | Create private bin (by default)         | Успешное создание bin с простым JSON (по умолчанию   | @positive            |
+|     |                              |                                         | создастся private bin -> X-Bin-Private = true)       |                      |
+| 2   |                              | Create bin: public bin                  | Создание публичного bin (X-Bin-Private = false)      | @positive            |
+| 3   |                              | Create bin with name                    | Создание bin с именем X-Bin-Name                     | @positive, @extended |
+| 4   |                              | Negative case. Create bin: invalid body | Отправка запроса с некорректно заполненным body      | @negative            |
+| 5   |                              | Negative case. Create bin: empty body   | Отправка запроса с пустым body                       | @negative            | 
 
 
-|  №  |   Название CRUD-операции     |                   Test name                 |                     Название теста                   |          tag         |  
-|-----|------------------------------|---------------------------------------------|------------------------------------------------------|----------------------|
-| 1   | Delete Bins API              | Delete existing bin                         | Успешное удаление существующего bin                  | @positive            |
-| 2   |                              | Attempt to delete the same bin again        | Попытка повторного удаления того же bin              | @negative            |
-| 3   |                              | Delete bin with invalid bin_id              | Удаление bin с невалидным bin_id                     | @negative            |
-| 4   |                              | Delete bin withot master key                | Удаление bin без X-Master-Key                        | @negative            |
+|  №  |   Название CRUD-операции     |                 Test name               |                     Название теста                   |          tag         |  
+|-----|------------------------------|-----------------------------------------|------------------------------------------------------|----------------------|
+| 1   | Delete Bins API              | Delete existing bin                     | Успешное удаление существующего bin                  | @positive            |
+| 2   |                              | Attempt to delete the same bin again    | Попытка повторного удаления того же bin              | @negative            |
+| 3   |                              | Delete bin with invalid bin_id          | Удаление bin с невалидным bin_id                     | @negative            |
+| 4   |                              | Delete bin withot master key            | Удаление bin без X-Master-Key                        | @negative            |
 
 
-|  №  |   Название CRUD-операции     |                   Test name                 |                     Название теста                   |          tag         |  
-|-----|------------------------------|---------------------------------------------|------------------------------------------------------|----------------------|
-| 1   | Read Bins API                | Read existing bin with metadata             | Чтение существующего bin с metadata                  | @positive            | 
-| 2   |                              | Read existing bin without metadata          | Чтение существующего bin без metadata (meta=false)   | @positive            |
-| 3   |                              | Try to read bin with invalid bin_id         | Чтение bin с невалидным bin_id                       | @negative            |
-| 4   |                              | Read bin missing master key                 | Чтение bin без X-Master-Key                          | @negative            |
+|  №  |   Название CRUD-операции     |                 Test name               |                     Название теста                   |          tag         |  
+|-----|------------------------------|-----------------------------------------|------------------------------------------------------|----------------------|
+| 1   | Read Bins API                | Read existing bin with metadata         | Чтение существующего bin с metadata                  | @positive            | 
+| 2   |                              | Read existing bin without metadata      | Чтение существующего bin без metadata (meta=false)   | @positive            |
+| 3   |                              | Try to read bin with invalid bin_id     | Чтение bin с невалидным bin_id                       | @negative            |
+| 4   |                              | Read bin missing master key             | Чтение bin без X-Master-Key                          | @negative            |
 
 
-|  №  |   Название CRUD-операции     |                   Test name                 |                     Название теста                   |          tag         |  
-|-----|------------------------------|---------------------------------------------|------------------------------------------------------|----------------------|
-| 1   | Update Bins API              | Successful bin updating                     | Успешное обновление bin                              | @positive            | 
-| 2   |                              | Update with X-Bin-Version = true            | Обновление с версионированием (X-Bin-Version = true) | @positive, @extended |
-| 3   |                              | Updating with invalid binId                 | Обновление с невалидным binId                        | @negative            |
-| 4   |                              | Update with empty data                      | Обновление с пустым data                             | @negative            |
-| 5   |                              | Updating without X-Master-Key               | Обнолвение без передачи X-Master-Key                 | @negative            |
+|  №  |   Название CRUD-операции     |                 Test name               |                     Название теста                   |          tag         |  
+|-----|------------------------------|-----------------------------------------|------------------------------------------------------|----------------------|
+| 1   | Update Bins API              | Successful bin updating                 | Успешное обновление bin                              | @positive            | 
+| 2   |                              | Update with X-Bin-Version = true        | Обновление с версионированием (X-Bin-Version = true) | @positive, @extended |
+| 3   |                              | Updating with invalid binId             | Обновление с невалидным binId                        | @negative            |
+| 4   |                              | Update with empty data                  | Обновление с пустым data                             | @negative            |
+| 5   |                              | Updating without X-Master-Key           | Обнолвение без передачи X-Master-Key                 | @negative            |
